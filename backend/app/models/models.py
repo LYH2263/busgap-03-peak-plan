@@ -11,6 +11,10 @@ class Line(Base):
     planned_headway_min: Mapped[float] = mapped_column(Float, default=8.0)
     bunch_threshold: Mapped[float] = mapped_column(Float, default=3.0)
     large_threshold: Mapped[float] = mapped_column(Float, default=15.0)
+    # 高峰窗：相对当日 0 点的起止分钟 + 高峰计划发车间隔；三者同时为 None 表示未配置高峰
+    peak_start_min: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    peak_end_min: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    peak_headway_min: Mapped[float | None] = mapped_column(Float, nullable=True)
     trips: Mapped[list["Trip"]] = relationship(back_populates="line")
 
 class Trip(Base):

@@ -46,7 +46,7 @@ function label(s: string) {
         <header>{{ e.stop_name }}</header>
         <div class="bg-gap-body">
           <div class="bg-gap-val">{{ e.gap_min }}′</div>
-          <div>计划 {{ e.planned_headway_min }}′</div>
+          <div>计划 {{ e.planned_headway_min }}′<span v-if="e.period">（{{ e.period === 'peak' ? '高峰' : '平峰' }}）</span></div>
           <div>{{ e.earlier_trip }} → {{ e.later_trip }}</div>
           <span class="badge" :class="e.status === 'bunching' ? 'badge-bad' : e.status === 'large_gap' ? 'badge-warn' : 'badge-ok'">
             {{ label(e.status) }}

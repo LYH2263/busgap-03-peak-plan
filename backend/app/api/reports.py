@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.models import Arrival, BunchReport, Line, Trip
-from app.services.bunch_engine import detect_bunching, events_to_dicts
+from app.services.bunch_engine import PeakWindow, detect_bunching, events_to_dicts
 router = APIRouter(prefix="/reports", tags=["reports"])
 
 @router.get("")
@@ -24,7 +24,10 @@ def run_detection(line_id: int, stop_name: str | None = None, db: Session = Depe
     arrivals = db.scalars(select(Arrival).where(Arrival.trip_id.in_(trip_ids))).all()
     payload = [{"stop_name": a.stop_name, "trip_no": trip_no_map[a.trip_id], "actual_arrive": a.actual_arrive}
                for a in arrivals if stop_name is None or a.stop_name == stop_name]
-    events = detect_bunching(payload, line.planned_headway_min, line.bunch_threshold, line.large_threshold)
+    peak = None
+    if line.peak_start_min is not None and line.peak_end_min is not None and line.peak_headway_min is not None:
+        peak = PeakWindow(line.peak_start_min, line.peak_end_min, line.peak_headway_min)
+    events = detect_bunching(payload, line.planned_headway_min, line.bunch_threshold, line.large_threshold, peak)
     data = events_to_dicts(events)
     report = BunchReport(line_id=line_id, stop_name=stop_name or "*", created_at=datetime.utcnow(),
                          summary_json=json.dumps(data, ensure_ascii=False))
