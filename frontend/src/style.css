@@ -169,6 +169,16 @@ th { color: var(--bg-dim); font-weight: 600; font-size: 0.78rem; }
 }
 .btn:hover { filter: brightness(1.08); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-ghost { background: transparent; color: var(--bg-cyan); border: 1px solid var(--bg-cyan); margin-left: 0.4rem; }
+input[type="time"], input[type="number"] {
+  background: #0a1a26; color: var(--bg-text);
+  border: 1px solid var(--bg-edge); padding: 0.3rem 0.4rem;
+  font-size: 0.82rem; width: 100%; min-width: 0; color-scheme: dark;
+}
+input[type="time"]:focus, input[type="number"]:focus { outline: 1px solid var(--bg-cyan); }
+.cell-num { max-width: 5.5rem; }
+.peak-edit { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start; }
+.peak-msg { font-size: 0.75rem; min-height: 1em; }
 .muted { color: var(--bg-dim); }
 .stat { font-size: 1.55rem; font-weight: 800; }
 
